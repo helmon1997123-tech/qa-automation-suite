@@ -1,6 +1,6 @@
-# QA Automation Portfolio — Demoblaze
+# QA Automation Suite — Demoblaze
 
-![CI](https://gitlab.com/Helmon1997/qa-automation-suite/badges/main/pipeline.svg)
+![CI](https://github.com/helmon1997123-tech/qa-automation-suite/actions/workflows/tests.yml/badge.svg)
 
 Фреймворк автоматизации тестирования для e-commerce приложения [Demoblaze](https://www.demoblaze.com).
 Покрывает API, UI и нагрузочное тестирование с CI/CD и Telegram-нотификациями.
@@ -14,36 +14,60 @@
 | Zod | Валидация схем API-ответов |
 | Allure | Отчёты с шагами, severity, labels |
 | k6 | Нагрузочное тестирование |
-| GitLab CI | CI/CD пайплайн |
+| GitHub Actions | CI/CD пайплайн |
 | Telegram Bot | Нотификации о результатах |
 
 ## Структура проекта
 
-```
-playwright-ts-api-web-k6/
+qa-automation-suite/
+
 ├── tests/
+
 │   ├── api/                  # API тесты
+
 │   │   ├── auth.spec.ts      # Авторизация и регистрация
+
 │   │   ├── products.spec.ts  # Каталог товаров + Zod валидация
+
 │   │   └── cart.spec.ts      # Корзина (happy path + negative)
+
 │   └── ui/                   # UI тесты
+
+│       ├── signup.spec.ts    # Регистрация через UI
+
 │       ├── login.spec.ts     # Авторизация через UI
+
 │       ├── catalog.spec.ts   # Каталог и фильтрация
+
 │       └── purchase.spec.ts  # E2E: логин → покупка → заказ
+
 ├── pages/                    # Page Object Model
+
+│   ├── SignupPage.ts
+
 │   ├── LoginPage.ts
+
 │   ├── CatalogPage.ts
+
 │   ├── ProductPage.ts
+
 │   └── CartPage.ts
+
 ├── helpers/
+
 │   ├── apiClient.ts          # HTTP-клиент для API тестов
+
 │   ├── schemas.ts            # Zod схемы для валидации ответов
+
 │   └── testData.ts           # Генераторы тестовых данных
+
 ├── load-test.k6.ts           # k6 нагрузочный сценарий
-├── .gitlab-ci.yml            # GitLab CI/CD
+
+├── .github/workflows/        # GitHub Actions CI/CD
+
 ├── playwright.config.ts
+
 └── .env.example
-```
 
 ## Покрытие тестами
 
@@ -55,8 +79,8 @@ playwright-ts-api-web-k6/
 | POST /login | Успешный логин | Critical |
 | POST /login | Неверный пароль | Normal |
 | POST /login | Несуществующий пользователь | Minor |
-| POST /entries | Список товаров + Zod валидация схемы | Critical |
-| POST /entries | Валидация схемы каждого товара | Normal |
+| GET /entries | Список товаров + Zod валидация схемы | Critical |
+| GET /entries | Валидация схемы каждого товара | Normal |
 | POST /view | Товар по id + Zod валидация | Critical |
 | POST /view | Несуществующий id | Minor |
 | POST /addtocart | Добавление товара | Critical |
@@ -67,7 +91,8 @@ playwright-ts-api-web-k6/
 | POST /viewcart | Невалидный токен (negative) | Minor |
 
 ### UI тесты (Page Object Model)
-- Авторизация: успех / неверный пароль / несуществующий пользователь
+- Регистрация: успех / дублирующий username / пустые поля
+- Авторизация: успех / неверный пароль / несуществующий пользователь / пустые поля
 - Каталог: фильтрация по категориям (Phones, Laptops, Monitors)
 - Карточка товара: открытие и проверка контента
 - **E2E сценарий:** логин → фильтрация → выбор товара → добавление в корзину → оформление заказа
@@ -82,7 +107,7 @@ playwright-ts-api-web-k6/
 ### Установка
 
 ```bash
-git clone https://gitlab.com/Helmon1997/qa-automation-suite.git
+git clone https://github.com/helmon1997123-tech/qa-automation-suite.git
 cd qa-automation-suite
 npm install
 npx playwright install chromium
@@ -114,7 +139,7 @@ npm run test:headed
 
 ```bash
 # Установи k6: https://k6.io/docs/get-started/installation/
-k6 run load-test.k6.ts
+npm run load
 ```
 
 ### Allure отчёт
@@ -127,13 +152,12 @@ npm run report
 
 Тесты запускаются автоматически:
 - При каждом `push` в `main` и `develop`
-- При создании Merge Request в `main`
-- По расписанию каждый день в 09:00 MSK
-- Вручную через GitLab UI (web trigger)
+- При создании Pull Request в `main`
+- Вручную через GitHub Actions (workflow_dispatch)
 
 После прогона генерируется Allure HTML отчёт и отправляется уведомление в Telegram.
 
-## Secrets для GitLab CI
+## Secrets для GitHub Actions
 
 | Variable | Описание |
 |---|---|

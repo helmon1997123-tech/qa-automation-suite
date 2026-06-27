@@ -5,8 +5,7 @@ on:
     branches: [main, develop]
   pull_request:
     branches: [main]
-  schedule:
-    - cron: '0 6 * * *'  # Каждый день в 9:00 MSK
+
   workflow_dispatch:
 
 jobs:
