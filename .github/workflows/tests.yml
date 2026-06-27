@@ -129,4 +129,3 @@ jobs:
             -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
             -d parse_mode="Markdown" \
             -d text="${MESSAGE}"
-        if: secrets.TELEGRAM_BOT_TOKEN != ''
