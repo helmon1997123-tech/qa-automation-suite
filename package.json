@@ -4,8 +4,9 @@
   "description": "QA Automation portfolio project — Demoblaze e-commerce testing",
   "scripts": {
     "test": "playwright test",
-    "test:api": "playwright test --project=api",
-    "test:ui": "playwright test --project=chromium",
+    "test:api": "rm -rf allure-results && playwright test --project=api && npm run report",
+    "test:ui": "rm -rf allure-results && playwright test --project=chromium && npm run report",
+    "test:all": "rm -rf allure-results && playwright test && npm run report",
     "test:headed": "playwright test --project=chromium --headed",
     "allure:generate": "allure generate allure-results --clean -o allure-report",
     "allure:open": "allure open allure-report",

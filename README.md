@@ -122,14 +122,14 @@ cp .env.example .env
 ### Запуск тестов
 
 ```bash
-# Все тесты
-npm test
-
-# Только API
+# Только API с отчётом
 npm run test:api
 
-# Только UI
+# Только UI с отчётом
 npm run test:ui
+
+# Все тесты с отчётом
+npm run test:all
 
 # UI в режиме браузера
 npm run test:headed
@@ -142,16 +142,29 @@ npm run test:headed
 npm run load
 ```
 
-### Allure отчёт
+### Allure отчёт локально
 
 ```bash
 npm run report
 ```
 
+### Allure отчёт из GitHub Actions
+
+1. Открой нужный пайплайн в **Actions**
+2. Листай вниз до раздела **Artifacts**
+3. Скачай `allure-report-api` или `allure-report-ui`
+4. Распакуй zip
+5. Запусти в терминале из папки проекта:
+```bash
+npx allure open ./allure-report
+```
+
+> ⚠️ Открывать `index.html` напрямую через браузер не работает — нужен локальный сервер.
+
 ## CI/CD
 
 Тесты запускаются автоматически:
-- При каждом `push` в `main` и `develop`
+- При каждом `push` в `main`
 - При создании Pull Request в `main`
 - Вручную через GitHub Actions (workflow_dispatch)
 
