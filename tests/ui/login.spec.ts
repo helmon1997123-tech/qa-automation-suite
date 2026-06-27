@@ -71,4 +71,42 @@ test.describe('UI — Авторизация', () => {
       await loginPage.login('nonexistent_xyz_123', 'password123');
     });
   });
+
+  test('Логин с пустым username — ошибка', async ({ page }) => {
+    await label('layer', 'ui');
+    await severity('normal');
+
+    const loginPage = new LoginPage(page);
+
+    await step('Открываем главную страницу', async () => {
+      await loginPage.goto();
+    });
+
+    await step('Логинимся с пустым username и проверяем ошибку', async () => {
+      page.once('dialog', async (dialog) => {
+        expect(dialog.message()).toBeTruthy();
+        await dialog.accept();
+      });
+      await loginPage.login('', password);
+    });
+  });
+
+  test('Логин с пустым паролем — ошибка', async ({ page }) => {
+    await label('layer', 'ui');
+    await severity('normal');
+
+    const loginPage = new LoginPage(page);
+
+    await step('Открываем главную страницу', async () => {
+      await loginPage.goto();
+    });
+
+    await step('Логинимся с пустым паролем и проверяем ошибку', async () => {
+      page.once('dialog', async (dialog) => {
+        expect(dialog.message()).toBeTruthy();
+        await dialog.accept();
+      });
+      await loginPage.login(username, '');
+    });
+  });
 });

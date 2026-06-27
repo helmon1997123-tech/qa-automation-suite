@@ -21,7 +21,7 @@ export async function signupApi(request: APIRequestContext, username: string, pa
 }
 
 export async function getProducts(request: APIRequestContext) {
-  const response = await request.post(`${API_URL}/entries`);
+  const response = await request.get(`${API_URL}/entries`);
   const body = await response.json();
   return { status: response.status(), body };
 }
@@ -35,9 +35,9 @@ export async function getProductById(request: APIRequestContext, id: number) {
 }
 
 export async function addToCart(
-  request: APIRequestContext,
-  token: string,
-  productId: number,
+    request: APIRequestContext,
+    token: string,
+    productId: number,
 ) {
   const response = await request.post(`${API_URL}/addtocart`, {
     data: {
@@ -59,14 +59,14 @@ export async function getCart(request: APIRequestContext, token: string) {
 }
 
 export async function placeOrder(
-  request: APIRequestContext,
-  token: string,
-  name: string,
-  country: string,
-  city: string,
-  card: string,
-  month: string,
-  year: string,
+    request: APIRequestContext,
+    token: string,
+    name: string,
+    country: string,
+    city: string,
+    card: string,
+    month: string,
+    year: string,
 ) {
   const response = await request.post(`${API_URL}/order`, {
     data: {

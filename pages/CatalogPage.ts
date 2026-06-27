@@ -33,7 +33,7 @@ export class CatalogPage {
 
   async openProduct(name: string) {
     await this.page.locator('.card-title a', { hasText: name }).first().click();
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForSelector('.name', { timeout: 10000 });
   }
 
   async expectProductsVisible() {
@@ -42,6 +42,6 @@ export class CatalogPage {
 
   async goToCart() {
     await this.cartLink.click();
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForSelector('#tbodyid', { timeout: 10000 });
   }
 }

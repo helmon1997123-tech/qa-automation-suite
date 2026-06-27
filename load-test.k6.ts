@@ -1,6 +1,7 @@
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 import { Rate, Trend } from 'k6/metrics';
+import encoding from 'k6/encoding';
 
 const errorRate = new Rate('errors');
 const loginDuration = new Trend('login_duration');
@@ -22,7 +23,7 @@ export const options = {
 const BASE_URL = 'https://api.demoblaze.com';
 
 function encodePassword(password: string): string {
-  return btoa(password);
+  return encoding.b64encode(password);
 }
 
 export default function () {
@@ -47,7 +48,7 @@ export default function () {
   sleep(1);
 
   // Тест: получение каталога
-  const catalogRes = http.post(`${BASE_URL}/entries`, '{}', {
+  const catalogRes = http.get(`${BASE_URL}/entries`, {
     headers: { 'Content-Type': 'application/json' },
   });
 

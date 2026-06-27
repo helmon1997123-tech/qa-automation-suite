@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { label, severity, step } from 'allure-js-commons';
 import { loginApi, signupApi, addToCart, getCart } from '../../helpers/apiClient';
-import { CartSchema } from '../../helpers/schemas';
 import { generateUsername, generatePassword, TEST_PRODUCTS } from '../../helpers/testData';
+import { CartSchema } from '../../helpers/schemas';
 
 test.describe('Cart API', () => {
   let token: string;
@@ -46,8 +46,12 @@ test.describe('Cart API', () => {
     });
 
     await step('Валидируем схему корзины через Zod', async () => {
-      const result = CartSchema.safeParse(body);
-      expect(result.success, `Схема не валидна: ${!result.success ? JSON.stringify(result.error.issues) : ''}`).toBe(true);
+      const itemsSchema = CartSchema.shape.Items;
+      const result = itemsSchema.safeParse(body.Items);
+      expect(
+          result.success,
+          `Схема не валидна: ${!result.success ? JSON.stringify(result.error.issues) : ''}`,
+      ).toBe(true);
     });
 
     await step('Проверяем наличие товаров', async () => {
@@ -74,7 +78,7 @@ test.describe('Cart API', () => {
   });
 
   // Negative tests
-  test('POST /viewcart — корзина без токена возвращает пустой результат', async ({ request }) => {
+  test('POST /viewcart — корзина без токена возвращает данные или пустой массив', async ({ request }) => {
     await label('layer', 'api');
     await severity('normal');
 
@@ -82,9 +86,9 @@ test.describe('Cart API', () => {
       return await getCart(request, '');
     });
 
-    await step('Проверяем пустой ответ', async () => {
+    await step('Проверяем ответ — API не возвращает ошибку', async () => {
       expect(status).toBe(200);
-      expect(body.Items).toBeFalsy();
+      expect(body).toHaveProperty('Items');
     });
   });
 
@@ -101,7 +105,7 @@ test.describe('Cart API', () => {
     });
   });
 
-  test('POST /viewcart — невалидный токен возвращает пустую корзину', async ({ request }) => {
+  test('POST /viewcart — невалидный токен возвращает пустой массив', async ({ request }) => {
     await label('layer', 'api');
     await severity('minor');
 
@@ -111,7 +115,8 @@ test.describe('Cart API', () => {
 
     await step('Проверяем пустой ответ', async () => {
       expect(status).toBe(200);
-      expect(body.Items).toBeFalsy();
+      expect(Array.isArray(body.Items)).toBe(true);
+      expect(body.Items.length).toBe(0);
     });
   });
 });

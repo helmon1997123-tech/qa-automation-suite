@@ -20,7 +20,10 @@ test.describe('Products API', () => {
 
     await step('Валидируем схему ответа через Zod', async () => {
       const result = ProductListSchema.safeParse(body);
-      expect(result.success, `Схема не валидна: ${!result.success ? JSON.stringify(result.error.issues) : ''}`).toBe(true);
+      expect(
+          result.success,
+          `Схема не валидна: ${!result.success ? JSON.stringify(result.error.issues) : ''}`,
+      ).toBe(true);
     });
 
     await step('Проверяем что список не пустой', async () => {
@@ -39,7 +42,10 @@ test.describe('Products API', () => {
     await step('Валидируем схему каждого товара через Zod', async () => {
       for (const item of body.Items) {
         const result = ProductSchema.safeParse(item);
-        expect(result.success, `Товар id=${item.id} не прошёл валидацию: ${!result.success ? JSON.stringify(result.error.issues) : ''}`).toBe(true);
+        expect(
+            result.success,
+            `Товар id=${item.id} не прошёл валидацию: ${!result.success ? JSON.stringify(result.error.issues) : ''}`,
+        ).toBe(true);
       }
     });
   });
@@ -58,7 +64,10 @@ test.describe('Products API', () => {
 
     await step('Валидируем схему товара через Zod', async () => {
       const result = ProductSchema.safeParse(body);
-      expect(result.success, `Схема не валидна: ${!result.success ? JSON.stringify(result.error.issues) : ''}`).toBe(true);
+      expect(
+          result.success,
+          `Схема не валидна: ${!result.success ? JSON.stringify(result.error.issues) : ''}`,
+      ).toBe(true);
     });
   });
 
@@ -77,7 +86,7 @@ test.describe('Products API', () => {
     });
   });
 
-  test('POST /view — несуществующий id возвращает null', async ({ request }) => {
+  test('POST /view — несуществующий id возвращает ошибку', async ({ request }) => {
     await label('layer', 'api');
     await severity('minor');
 
@@ -87,7 +96,7 @@ test.describe('Products API', () => {
 
     await step('Проверяем ответ', async () => {
       expect(status).toBe(200);
-      expect(body).toBeNull();
+      expect(body).toHaveProperty('errorMessage');
     });
   });
 });

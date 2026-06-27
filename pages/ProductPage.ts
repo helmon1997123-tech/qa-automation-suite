@@ -14,11 +14,10 @@ export class ProductPage {
   }
 
   async addToCart() {
-    await this.addToCartButton.click();
-    // Handle alert dialog
     this.page.once('dialog', async (dialog) => {
       await dialog.accept();
     });
+    await this.addToCartButton.click();
     await this.page.waitForTimeout(1000);
   }
 

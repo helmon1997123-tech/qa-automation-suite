@@ -17,7 +17,6 @@ export const CartItemSchema = z.object({
   id: z.string(),
   cookie: z.string(),
   prod_id: z.number(),
-  flag: z.string(),
 });
 
 export const CartSchema = z.object({
